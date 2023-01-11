@@ -16,6 +16,14 @@ app.engine(
   'hbs',
   handlebarsEngine({
     extname: '.hbs',
+    helpers: {
+      not: function (v: unknown) {
+        return !v
+      },
+      isDisabled: function (v: unknown) {
+        return v ? 'disabled' : ''
+      },
+    },
   })
 )
 
@@ -28,7 +36,7 @@ const home = async (req: Request, res: Response) => {
   if (query) {
     locals = {
       searchQueryValue: query,
-      items: await siteParser.queryBrands(query),
+      items: await siteParser.parseBrandsFromCatalogContent(query),
     }
   } else {
     locals = {
