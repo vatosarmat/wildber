@@ -5,33 +5,56 @@ import puppeteer, { ElementHandle, Browser, Page, CDPSession } from 'puppeteer'
 const brand = {
   site: 'https://www.wildberries.ru/',
   selector: {
+    clearBtn: '#searchBlock .search-catalog__btn--clear',
     input: '#searchInput',
+    applyInput: '#applySearchBtn',
+    results: (q: string) => `//h1[contains(text(),"${q}")]`,
     query: '#catalog .product-card__main .brand-name',
   },
 }
 
-export async function parseBrands(query: string): Promise<string[]> {
-  console.log(query)
-  const browser = await puppeteer.launch({
-    args: ['--window-size=1920,1080'],
-    defaultViewport: null,
-  })
-  const page = await browser.newPage()
-  const client = await page.target().createCDPSession()
-  await client.send('Emulation.clearDeviceMetricsOverride')
-  await page.goto(brand.site)
-  await page.waitForNetworkIdle()
-  await page.type(brand.selector.input, query, { delay: 100 })
-  await page.keyboard.press('Enter')
-  await page.waitForNetworkIdle()
-  await page.screenshot({ path: 'screenshot.png' })
+export class SiteParser {
+  private browser: Browser
+  private cdp: CDPSession
+  private page: Page
 
-  const result = (await page.$$eval(brand.selector.query, elements =>
-    elements.map(el => el.textContent).filter(txt => txt)
-  )) as string[]
+  public async launch() {
+    this.browser = await puppeteer.launch({
+      args: ['--window-size=1920,1080'],
+      defaultViewport: null,
+    })
+    this.page = await this.browser.newPage()
+    this.cdp = await this.page.target().createCDPSession()
+    await this.cdp.send('Emulation.clearDeviceMetricsOverride')
+    await this.page.goto(brand.site)
+    await this.page.waitForNetworkIdle()
+  }
 
-  await client.detach()
-  await browser.close()
+  public async stop() {
+    await this.cdp.detach()
+    await this.browser.close()
+  }
 
-  return result
+  public async queryBrands(query: string) {
+    console.log(query)
+    // await this.page.goto(brand.site)
+    // await this.page.waitForSelector(brand.selector.applyInput)
+    // await this.page.waitForNetworkIdle()
+    // this.page.click(brand.selector.input, { clickCount: 3 })
+    // await this.page.keyboard.press('Backspace')
+
+    await this.page.click(brand.selector.clearBtn).catch(er => er)
+    await this.page.type(brand.selector.input, query, { delay: 100 })
+    // await this.page.keyboard.press('Enter')
+    await this.page.click(brand.selector.applyInput)
+    await this.page.waitForXPath(brand.selector.results(query))
+    // await this.page.waitForSelector(brand.selector.results)
+    await this.page.screenshot({ path: 'screenshot.png' })
+
+    const result = (await this.page.$$eval(brand.selector.query, elements =>
+      elements.map(el => el.textContent).filter(txt => txt)
+    )) as string[]
+
+    return result
+  }
 }

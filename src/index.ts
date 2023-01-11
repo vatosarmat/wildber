@@ -2,11 +2,12 @@ import fs from 'fs/promises'
 import express, { Request, Response } from 'express'
 import { engine as handlebarsEngine } from 'express-handlebars'
 
-import { parseBrands } from './parse'
+import { SiteParser } from './parse'
 import { appPath } from './utils'
 
 const app = express()
-const parseForm = express.urlencoded({ extended: true })
+const siteParser = new SiteParser()
+// const parseForm = express.urlencoded({ extended: true })
 
 app.use('/public', express.static(appPath('public')))
 app.set('views', appPath('views'))
@@ -21,16 +22,27 @@ app.engine(
 //
 
 const home = async (req: Request, res: Response) => {
-  const locals = {
-    items: req?.body?.searchQuery ? await parseBrands(req.body.searchQuery) : undefined,
+  const query = req.query.searchQuery as unknown as string | undefined
+
+  let locals
+  if (query) {
+    locals = {
+      searchQueryValue: query,
+      items: await siteParser.queryBrands(query),
+    }
+  } else {
+    locals = {
+      searchQueryValue: '',
+    }
   }
 
   res.render('home', locals)
 }
 
 app.get('/', home)
-app.post('/', parseForm, home)
 
-app.listen(3000, () => {
-  console.log('server running')
-})
+siteParser.launch().then(() =>
+  app.listen(3000, () => {
+    console.log('server running')
+  })
+)

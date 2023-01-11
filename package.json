@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon -w src -w views -e ts,json,hbs src/index.ts",
     "start": "ts-node src/index.ts",
     "tsc": "tsc --noEmit",
     "lint": "eslint -c types.eslintrc.js \"src/**/*.ts\"",
