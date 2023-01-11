@@ -1,0 +1,26 @@
+.container {
+  margin: auto;
+  width: 1080px;
+}
+
+.form {
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-button {
+  width: 120px;
+}
+
+.text-strong {
+  text-decoration: underline;
+  font-style: italic;
+}

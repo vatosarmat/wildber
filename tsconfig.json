@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+    "strict": true,
+    "strictPropertyInitialization": false,
+
+    "baseUrl": "./src"
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"],
+    "swc": true
+  }
+}
+

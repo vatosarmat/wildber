@@ -1,0 +1,19 @@
+<form class='form' action='' method='post'>
+  <label class='form-control'>
+    <span>Query</span>
+    <input type='text' name='searchQuery' />
+  </label>
+  <label class='form-control'>
+    <span>My brand</span>
+    <input type='text' id='#myBrand' />
+  </label>
+  <button class='form-button' type='submit'>Search</button>
+</form>
+{{#if items}}
+  <h2>Search result</h2>
+  <ol>
+    {{#each items}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ol>
+{{/if}}
