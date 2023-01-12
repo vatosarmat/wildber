@@ -52,8 +52,20 @@ export class SiteParser {
     this.browser = await puppeteer.launch({
       args: ['--window-size=1920,1080'],
       defaultViewport: null,
+      // headless: false,
     })
+
     this.page = await this.browser.newPage()
+    await this.page.setRequestInterception(true)
+    this.page.on('request', req => {
+      const resType = req.resourceType()
+      if (['image', 'font', 'media'].includes(resType)) {
+        req.abort()
+      } else {
+        req.continue()
+      }
+    })
+
     this.cdp = await this.page.target().createCDPSession()
     await this.cdp.send('Emulation.clearDeviceMetricsOverride')
     await this.page.goto(brand.site)
