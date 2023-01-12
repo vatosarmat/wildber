@@ -1,7 +1,14 @@
 <form class='form' action='' method='get'>
   <label class='form-control'>
     <span>Query</span>
-    <input type='text' name='searchQuery' value='{{searchQueryValue}}' />
+    <input
+      type='text'
+      name='searchQuery'
+      value='{{searchQueryValue}}'
+      title='Must have at least one alphanumeric segment with length >=3'
+      pattern='.*(\p{L}|\p{N}){3,}.*'
+      required
+    />
   </label>
   <label class='form-control'>
     <span>My brand</span>
