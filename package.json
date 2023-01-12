@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clear": "rm -rf dist && rm -f public/index.js",
+    "build:back": "tsc",
     "build:front": "tsc --project tsconfig.front.json",
+    "build": "npm run clear && npm run build:back && npm run build:front",
+    "build:docker": "docker build -t wildber .",
+    "build:full": "npm run build && npm run build:docker",
     "dev": "nodemon -w src -w views -e ts,json,hbs src/index.ts",
     "start": "ts-node src/index.ts",
     "tsc": "tsc --noEmit",
@@ -29,10 +34,8 @@
   },
   "dependencies": {
     "async-mutex": "^0.4.0",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-handlebars": "^6.0.6",
-    "mongoose": "^6.8.3",
     "puppeteer": "^19.5.0"
   }
 }

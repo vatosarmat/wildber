@@ -50,7 +50,7 @@ export class SiteParser {
 
   public async launch() {
     this.browser = await puppeteer.launch({
-      args: ['--window-size=1920,1080'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1920,1080'],
       defaultViewport: null,
       // headless: false,
     })

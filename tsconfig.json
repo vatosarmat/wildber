@@ -12,11 +12,13 @@
     "strict": true,
     "strictPropertyInitialization": false,
 
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+
+    "outDir": "./dist"
   },
+  "include": ["./src/**/*"],
   "ts-node": {
     "require": ["tsconfig-paths/register"],
     "swc": true
   }
 }
-
