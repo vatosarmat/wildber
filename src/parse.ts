@@ -60,9 +60,9 @@ export class SiteParser {
     this.page.on('request', req => {
       const resType = req.resourceType()
       if (['image', 'font', 'media'].includes(resType)) {
-        req.abort()
+        void req.abort()
       } else {
-        req.continue()
+        void req.continue()
       }
     })
 
@@ -86,7 +86,7 @@ export class SiteParser {
     // await this.page.keyboard.press('Backspace')
 
     const result = this.mutex.runExclusive(async () => {
-      await this.page.click(brand.selector.clearBtn).catch(er => er)
+      await this.page.click(brand.selector.clearBtn).catch(er => er as Error)
       await this.page.type(brand.selector.input, query, { delay: UI_TIMEOUT })
       // await this.page.keyboard.press('Enter')
       await this.page.click(brand.selector.applyInput)

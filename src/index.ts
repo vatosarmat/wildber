@@ -57,8 +57,8 @@ const home = async (req: Request, res: Response) => {
 
 app.get('/', home)
 
-siteParser.launch().then(() =>
-  app.listen(3000, () => {
+void siteParser.launch().then(() =>
+  app.listen(process.env.PORT || 3000, () => {
     console.log('server running')
   })
 )

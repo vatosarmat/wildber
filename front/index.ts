@@ -1,4 +1,4 @@
-const DEBOUNCE_TIMEOUT = 1000
+const DEBOUNCE_TIMEOUT = 500
 let timer: number | undefined = undefined
 
 class BrandListManager {

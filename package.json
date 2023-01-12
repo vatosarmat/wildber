@@ -8,7 +8,7 @@
     "dev": "nodemon -w src -w views -e ts,json,hbs src/index.ts",
     "start": "ts-node src/index.ts",
     "tsc": "tsc --noEmit",
-    "lint": "eslint -c types.eslintrc.js \"src/**/*.ts\"",
+    "lint": "eslint -c types.eslintrc.js \"src/**/*.ts\" \"front/**/*.ts\"",
     "check": "npm run tsc && npm run lint"
   },
   "author": "",
