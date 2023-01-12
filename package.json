@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:front": "tsc --project tsconfig.front.json",
     "dev": "nodemon -w src -w views -e ts,json,hbs src/index.ts",
     "start": "ts-node src/index.ts",
     "tsc": "tsc --noEmit",

@@ -80,9 +80,15 @@ export class SiteParser {
     // await this.page.screenshot({ path: 'screenshot.png' })
     await this.scrollDown()
 
-    const result = (await this.page.$$eval(brand.selector.query, elements =>
-      elements.map(el => el.textContent).filter(txt => txt)
-    )) as string[]
+    const result = await this.page.$$eval(brand.selector.query, elements =>
+      // elements.map(el => el.textContent).filter(txt => txt)
+      elements.reduce((ac, el) => {
+        if (el.textContent) {
+          ac[el.textContent] = (ac[el.textContent] ?? 0) + 1
+        }
+        return ac
+      }, {} as Record<string, number>)
+    )
 
     return result
   }

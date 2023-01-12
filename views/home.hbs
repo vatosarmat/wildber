@@ -5,13 +5,13 @@
   </label>
   <label class='form-control'>
     <span>My brand</span>
-    <input type='text' id='#myBrand' {{isDisabled (not items)}} />
+    <input type='text' id='myBrand' {{isDisabled (not items)}} />
   </label>
   <button class='form-button' type='submit'>Search</button>
 </form>
 {{#if items}}
-  <h2>Search result</h2>
-  <ol>
+  <h2>Search result for "{{searchQueryValue}}"</h2>
+  <ol id='brandList'>
     {{#each items}}
       <li>{{this}}</li>
     {{/each}}

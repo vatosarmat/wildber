@@ -36,7 +36,7 @@ const home = async (req: Request, res: Response) => {
   if (query) {
     locals = {
       searchQueryValue: query,
-      items: await siteParser.parseBrandsFromCatalogContent(query),
+      items: Object.keys(await siteParser.parseBrandsFromCatalogContent(query)),
     }
   } else {
     locals = {
