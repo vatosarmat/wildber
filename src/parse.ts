@@ -93,6 +93,8 @@ export class SiteParser {
       await this.page.waitForXPath(brand.selector.results(query))
       // await this.page.waitForSelector(brand.selector.results)
       // await this.page.screenshot({ path: 'screenshot.png' })
+
+      //this slows down the whole operation
       await this.scrollDown()
 
       return this.page.$$eval(brand.selector.query, elements =>

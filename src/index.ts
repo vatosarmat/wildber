@@ -16,10 +16,19 @@ app.engine(
   handlebarsEngine({
     extname: '.hbs',
     helpers: {
-      not: function (v: unknown) {
-        return !v
+      empty: function (v: unknown) {
+        return !v || (Array.isArray(v) && v.length === 0)
       },
-      isDisabled: function (v: unknown) {
+      emptyArray: function (v: unknown) {
+        return Array.isArray(v) && v.length === 0
+      },
+      // not: function (v: unknown) {
+      //   return !v
+      // },
+      // or: function (a: unknown, b: unknown) {
+      //   return a || b
+      // },
+      maybeDisabled: function (v: unknown) {
         return v ? 'disabled' : ''
       },
     },

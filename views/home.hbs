@@ -12,7 +12,7 @@
   </label>
   <label class='form-control'>
     <span>My brand</span>
-    <input type='text' id='myBrand' {{isDisabled (not items)}} />
+    <input type='text' id='myBrand' {{maybeDisabled (empty items)}} />
   </label>
   <button class='form-button' type='submit'>Search</button>
 </form>
@@ -23,4 +23,8 @@
       <li>{{this}}</li>
     {{/each}}
   </ol>
+{{else}}
+  {{#if (emptyArray items)}}
+    <h2>No search result for "{{searchQueryValue}}"</h2>
+  {{/if}}
 {{/if}}
