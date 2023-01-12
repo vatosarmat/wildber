@@ -1,4 +1,5 @@
-import puppeteer, { ElementHandle, Browser, Page, CDPSession } from 'puppeteer'
+import puppeteer, { Browser, Page, CDPSession } from 'puppeteer'
+import { Mutex } from 'async-mutex'
 
 // const sleep = async (seconds: number) => new Promise(r => setTimeout(r, seconds))
 //
@@ -20,6 +21,7 @@ export class SiteParser {
   private browser: Browser
   private cdp: CDPSession
   private page: Page
+  private mutex = new Mutex()
 
   private async scrollDown() {
     return await this.page.evaluate(
@@ -71,24 +73,26 @@ export class SiteParser {
     // this.page.click(brand.selector.input, { clickCount: 3 })
     // await this.page.keyboard.press('Backspace')
 
-    await this.page.click(brand.selector.clearBtn).catch(er => er)
-    await this.page.type(brand.selector.input, query, { delay: UI_TIMEOUT })
-    // await this.page.keyboard.press('Enter')
-    await this.page.click(brand.selector.applyInput)
-    await this.page.waitForXPath(brand.selector.results(query))
-    // await this.page.waitForSelector(brand.selector.results)
-    // await this.page.screenshot({ path: 'screenshot.png' })
-    await this.scrollDown()
+    const result = this.mutex.runExclusive(async () => {
+      await this.page.click(brand.selector.clearBtn).catch(er => er)
+      await this.page.type(brand.selector.input, query, { delay: UI_TIMEOUT })
+      // await this.page.keyboard.press('Enter')
+      await this.page.click(brand.selector.applyInput)
+      await this.page.waitForXPath(brand.selector.results(query))
+      // await this.page.waitForSelector(brand.selector.results)
+      // await this.page.screenshot({ path: 'screenshot.png' })
+      await this.scrollDown()
 
-    const result = await this.page.$$eval(brand.selector.query, elements =>
-      // elements.map(el => el.textContent).filter(txt => txt)
-      elements.reduce((ac, el) => {
-        if (el.textContent) {
-          ac[el.textContent] = (ac[el.textContent] ?? 0) + 1
-        }
-        return ac
-      }, {} as Record<string, number>)
-    )
+      return this.page.$$eval(brand.selector.query, elements =>
+        // elements.map(el => el.textContent).filter(txt => txt)
+        elements.reduce((ac, el) => {
+          if (el.textContent) {
+            ac[el.textContent] = (ac[el.textContent] ?? 0) + 1
+          }
+          return ac
+        }, {} as Record<string, number>)
+      )
+    })
 
     return result
   }

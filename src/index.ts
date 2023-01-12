@@ -1,4 +1,3 @@
-import fs from 'fs/promises'
 import express, { Request, Response } from 'express'
 import { engine as handlebarsEngine } from 'express-handlebars'
 
